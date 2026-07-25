@@ -14,7 +14,7 @@ const DEFAULT_STATE: PosterState = {
   orgLogo: '/unnamed.png',
   campaignLogo: SVGS.swachhSurvekshanLogo,
   customLeftIllustration: '',
-  customRightIllustration: '/WORKER.png',
+  customRightIllustration: '/worker.png',
   mainTitle: {
     text: 'नगर निगम मथुरा-वृंदावन',
     fontFamily: '"Noto Sans Devanagari"',

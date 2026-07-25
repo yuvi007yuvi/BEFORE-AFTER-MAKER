@@ -12,7 +12,7 @@ export const SVGS = {
 
   garbageTruckIcon: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect x="10" y="20" width="28" height="22" rx="2" fill="%2300897b"/><rect x="38" y="24" width="14" height="18" rx="2" fill="%2300acc1"/><polygon points="52,28 58,28 56,38 52,38" fill="%23b2ebf2"/><circle cx="20" cy="44" r="6" fill="%2337474f"/><circle cx="44" cy="44" r="6" fill="%2337474f"/><path d="M16,26 L26,26 L26,30 L16,30 Z" fill="%23eceff1"/><path d="M18,28 L24,28" stroke="%23004d40" stroke-width="1.5" stroke-linecap="round"/></svg>`,
 
-  sanitationWorkerIcon: '/WORKER.png',
+  sanitationWorkerIcon: '/worker.png',
 
   locationPin: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23d32f2f" width="24" height="24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
 
