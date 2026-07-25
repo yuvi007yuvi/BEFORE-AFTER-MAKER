@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { PosterCanvas } from './components/PosterCanvas';
 import type { PosterState } from './components/PosterCanvas';
 import { ControlPanel } from './components/ControlPanel';
-import { BatchGenerator } from './components/BatchGenerator';
 import { SVGS } from './constants/templates';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
