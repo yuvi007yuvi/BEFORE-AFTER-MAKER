@@ -270,18 +270,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
           {/* Leaves/Feathers Background Decoration */}
           {state.decorations.leaves && (
             <>
-              {/* Top Left */}
-              <img src="/feather.png" alt="" className="absolute top-6 left-6 w-24 h-24 opacity-35 animate-pulse pointer-events-none rotate-12" />
-              {/* Top Right */}
-              <img src="/feather.png" alt="" className="absolute top-28 right-16 w-28 h-28 opacity-30 pointer-events-none -rotate-45" />
-              {/* Mid Left */}
-              <img src="/feather.png" alt="" className="absolute top-80 left-8 w-20 h-20 opacity-20 pointer-events-none rotate-30" />
-              {/* Mid Right */}
-              <img src="/feather.png" alt="" className="absolute top-[400px] right-8 w-24 h-24 opacity-15 pointer-events-none rotate-[75deg]" />
-              {/* Lower Mid Left */}
-              <img src="/feather.png" alt="" className="absolute bottom-[280px] left-16 w-24 h-24 opacity-20 pointer-events-none -rotate-12" />
-              {/* Lower Mid Right */}
-              <img src="/feather.png" alt="" className="absolute bottom-[360px] right-20 w-20 h-20 opacity-15 pointer-events-none rotate-45" />
+              <img src="/feather.png" alt="" className="absolute top-4 left-4 w-16 h-16 opacity-30 animate-pulse pointer-events-none rotate-12" />
+              <img src="/feather.png" alt="" className="absolute top-20 right-12 w-20 h-20 opacity-25 pointer-events-none -rotate-45" />
+              <img src="/feather.png" alt="" className="absolute top-48 left-12 w-12 h-12 opacity-15 pointer-events-none rotate-30" />
             </>
           )}
 
@@ -471,8 +462,11 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             </div>
           </div>
 
-          {/* Location Section */}
-          <div className="w-full flex flex-col items-center px-8 mt-2 mb-4 relative z-10">
+          {/* Location Section with Peacocks */}
+          <div className="w-full flex items-center justify-center gap-4 px-8 mt-2 mb-4 relative z-10">
+            {/* Left Peacock */}
+            <img src={SVGS.peacockLeft} alt="Peacock" className="w-12 h-12 object-contain hover:-rotate-6 transition-all" />
+
             <div 
               className="flex items-center gap-2 px-6 py-2 rounded-full border shadow-sm cursor-pointer hover:scale-105 transition-all bg-[#ffffff]"
               style={{ borderColor: state.themeColor }}
@@ -491,6 +485,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                 {state.location.text || (state.lang === 'hi' ? 'स्थान / वार्ड दर्ज करें' : 'Enter Location / Ward')}
               </span>
             </div>
+
+            {/* Right Peacock */}
+            <img src={SVGS.peacockRight} alt="Peacock" className="w-12 h-12 object-contain hover:rotate-6 transition-all" />
           </div>
 
           {/* Slogan Footer & Background Graphics */}
@@ -522,7 +519,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
 
             {/* Middle Slogan Text with Flute & Peacock Feather */}
             <div className="flex-1 text-center px-4 flex flex-col items-center gap-1">
-              <img src={SVGS.krishnaFlute} alt="Bansuri & Mor Pankh" className="w-56 h-14 object-contain hover:scale-105 transition-all pointer-events-auto mb-1" />
+              <img src={SVGS.krishnaFlute} alt="Bansuri & Mor Pankh" className="w-36 h-10 object-contain hover:scale-105 transition-all pointer-events-auto mb-1" />
               <p 
                 style={{
                   fontFamily: state.footerSlogan.fontFamily,
