@@ -31,6 +31,7 @@ export interface TextStyle {
 export interface PosterState {
   lang: 'hi' | 'en';
   gradientStyle: 'light' | 'dark' | 'midnight' | 'none';
+  swachBharatLogo: string;
   orgLogo: string;
   campaignLogo: string;
   customLeftIllustration: string;
@@ -95,7 +96,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
   const [imageDragActive, setImageDragActive] = useState<'before' | 'after' | null>(null);
 
   // Handle Drag & Drop upload for images
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>, target: 'before' | 'after' | 'orgLogo' | 'campaignLogo' | 'qr') => {
+  const handleDrop = (e: React.DragEvent, target: 'before' | 'after' | 'orgLogo' | 'campaignLogo' | 'swachBharatLogo' | 'qr') => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -108,6 +109,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               return { ...prev, beforeImage: { ...prev.beforeImage, src: resultStr } };
             } else if (target === 'after') {
               return { ...prev, afterImage: { ...prev.afterImage, src: resultStr } };
+            } else if (target === 'swachBharatLogo') {
+              return { ...prev, swachBharatLogo: resultStr };
             } else if (target === 'orgLogo') {
               return { ...prev, orgLogo: resultStr };
             } else if (target === 'campaignLogo') {
@@ -123,7 +126,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'before' | 'after' | 'orgLogo' | 'campaignLogo' | 'qr') => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, target: 'before' | 'after' | 'orgLogo' | 'campaignLogo' | 'swachBharatLogo' | 'qr') => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -135,6 +138,8 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               return { ...prev, beforeImage: { ...prev.beforeImage, src: resultStr } };
             } else if (target === 'after') {
               return { ...prev, afterImage: { ...prev.afterImage, src: resultStr } };
+            } else if (target === 'swachBharatLogo') {
+              return { ...prev, swachBharatLogo: resultStr };
             } else if (target === 'orgLogo') {
               return { ...prev, orgLogo: resultStr };
             } else if (target === 'campaignLogo') {
@@ -262,13 +267,32 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             borderRadius: state.decorations.roundedCorners ? '24px' : '0px',
           }}
         >
-          {/* Leaves Background Decoration */}
+          {/* Leaves/Feathers Background Decoration */}
           {state.decorations.leaves && (
             <>
-              <img src={SVGS.leafIcon} alt="" className="absolute top-4 left-4 w-12 h-12 opacity-30 animate-pulse pointer-events-none" />
-              <img src={SVGS.leafIcon} alt="" className="absolute top-8 right-12 w-10 h-10 opacity-20 pointer-events-none rotate-45" />
-              <img src={SVGS.leafIcon} alt="" className="absolute top-24 left-1/3 w-8 h-8 opacity-10 pointer-events-none -rotate-12" />
+              {/* Top Left */}
+              <img src="/feather.png" alt="" className="absolute top-6 left-6 w-24 h-24 opacity-35 animate-pulse pointer-events-none rotate-12" />
+              {/* Top Right */}
+              <img src="/feather.png" alt="" className="absolute top-28 right-16 w-28 h-28 opacity-30 pointer-events-none -rotate-45" />
+              {/* Mid Left */}
+              <img src="/feather.png" alt="" className="absolute top-80 left-8 w-20 h-20 opacity-20 pointer-events-none rotate-30" />
+              {/* Mid Right */}
+              <img src="/feather.png" alt="" className="absolute top-[400px] right-8 w-24 h-24 opacity-15 pointer-events-none rotate-[75deg]" />
+              {/* Lower Mid Left */}
+              <img src="/feather.png" alt="" className="absolute bottom-[280px] left-16 w-24 h-24 opacity-20 pointer-events-none -rotate-12" />
+              {/* Lower Mid Right */}
+              <img src="/feather.png" alt="" className="absolute bottom-[360px] right-20 w-20 h-20 opacity-15 pointer-events-none rotate-45" />
             </>
+          )}
+
+          {/* Temple Silhouette Backdrop */}
+          {state.decorations.silhouette && (
+            <img 
+              src="/temples.png" 
+              alt="Temple Silhouette" 
+              className="absolute bottom-0 left-0 w-full object-contain opacity-[0.08] pointer-events-none z-0" 
+              style={{ maxHeight: '380px' }}
+            />
           )}
 
           {/* Header Region */}
@@ -282,11 +306,30 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             onClick={(e) => { e.stopPropagation(); setSelectedElement('header'); }}
           >
 
-            {/* Logos Row */}
-            <div className="flex items-center justify-center gap-6 mb-4">
+            {/* Logos Row (White Ribbon) */}
+            <div className="flex items-center justify-center gap-6 mb-4 bg-white px-6 py-2 rounded-2xl shadow-sm border border-slate-100/50 mx-auto w-fit">
+              {/* Swachh Bharat Logo */}
+              <div 
+                className="relative w-40 h-24 flex items-center justify-center border border-transparent rounded bg-transparent p-1 hover:border-emerald-500 cursor-pointer"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => handleDrop(e, 'swachBharatLogo')}
+                onClick={(e) => { e.stopPropagation(); setSelectedElement('swachBharatLogo'); }}
+              >
+                <img src={state.swachBharatLogo || '/swach_bharat.png'} alt="Swachh Bharat Logo" className="max-w-full max-h-full object-contain" />
+                <input
+                  type="file"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'swachBharatLogo')}
+                />
+              </div>
+
+              {/* Vertical Divider */}
+              <div className="w-[2px] h-16 bg-slate-300" />
+
               {/* Org Logo */}
               <div 
-                className="relative w-28 h-24 flex items-center justify-center border border-transparent rounded bg-transparent p-1 hover:border-emerald-500 cursor-pointer"
+                className="relative w-40 h-24 flex items-center justify-center border border-transparent rounded bg-transparent p-1 hover:border-emerald-500 cursor-pointer"
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, 'orgLogo')}
                 onClick={(e) => { e.stopPropagation(); setSelectedElement('orgLogo'); }}
@@ -305,7 +348,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
 
               {/* Campaign Logo */}
               <div 
-                className="relative w-44 h-24 flex items-center justify-center border border-transparent rounded bg-transparent p-1 hover:border-emerald-500 cursor-pointer"
+                className="relative w-40 h-24 flex items-center justify-center border border-transparent rounded bg-transparent p-1 hover:border-emerald-500 cursor-pointer"
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => handleDrop(e, 'campaignLogo')}
                 onClick={(e) => { e.stopPropagation(); setSelectedElement('campaignLogo'); }}
@@ -445,7 +488,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
                 }}
                 className="text-[#1e293b] tracking-wide"
               >
-                {state.location.text}
+                {state.location.text || (state.lang === 'hi' ? 'स्थान / वार्ड दर्ज करें' : 'Enter Location / Ward')}
               </span>
             </div>
           </div>
@@ -477,8 +520,9 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
               ) : null}
             </div>
 
-            {/* Middle Slogan Text */}
-            <div className="flex-1 text-center px-4">
+            {/* Middle Slogan Text with Flute & Peacock Feather */}
+            <div className="flex-1 text-center px-4 flex flex-col items-center gap-1">
+              <img src={SVGS.krishnaFlute} alt="Bansuri & Mor Pankh" className="w-56 h-14 object-contain hover:scale-105 transition-all pointer-events-auto mb-1" />
               <p 
                 style={{
                   fontFamily: state.footerSlogan.fontFamily,

@@ -10,6 +10,7 @@ import { Sparkles } from 'lucide-react';
 const DEFAULT_STATE: PosterState = {
   lang: 'hi',
   gradientStyle: 'light',
+  swachBharatLogo: '/swach_bharat.png',
   orgLogo: '/unnamed.png',
   campaignLogo: SVGS.swachhSurvekshanLogo,
   customLeftIllustration: '',
@@ -119,17 +120,13 @@ function App() {
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [canvasScale, setCanvasScale] = useState<number>(0.75);
   const [autoSaveMsg, setAutoSaveMsg] = useState('');
-  const [isMobile, setIsMobile] = useState(false);
-
   // Auto-fit canvas scale depending on screen width
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setIsMobile(true);
         if (window.innerWidth < 640) setCanvasScale(0.38);
         else setCanvasScale(0.55);
       } else {
-        setIsMobile(false);
         setCanvasScale(0.75);
       }
     };
