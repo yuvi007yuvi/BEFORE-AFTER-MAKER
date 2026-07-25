@@ -120,13 +120,19 @@ function App() {
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [canvasScale, setCanvasScale] = useState<number>(0.75);
   const [autoSaveMsg, setAutoSaveMsg] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
 
   // Auto-fit canvas scale depending on screen width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 640) setCanvasScale(0.38);
-      else if (window.innerWidth < 1024) setCanvasScale(0.55);
-      else setCanvasScale(0.75);
+      if (window.innerWidth < 768) {
+        setIsMobile(true);
+        if (window.innerWidth < 640) setCanvasScale(0.38);
+        else setCanvasScale(0.55);
+      } else {
+        setIsMobile(false);
+        setCanvasScale(0.75);
+      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -338,15 +344,17 @@ function App() {
           </div>
 
           {/* Batch Generator Segment */}
-          <BatchGenerator
-            currentState={state}
-            onSelectGeneratedPoster={(posterData) => {
-              setState(prev => ({
-                ...prev,
-                ...posterData
-              }));
-            }}
-          />
+          {!isMobile && (
+            <BatchGenerator
+              currentState={state}
+              onSelectGeneratedPoster={(posterData) => {
+                setState(prev => ({
+                  ...prev,
+                  ...posterData
+                }));
+              }}
+            />
+          )}
         </div>
 
         {/* Right Side (Settings Panel) */}
@@ -363,9 +371,21 @@ function App() {
         </div>
       </main>
 
-      {/* Footer Branding */}
-      <footer className="py-6 border-t border-slate-200 text-center text-xs text-slate-400 font-semibold bg-white mt-12">
-        <p>© 2026 Before & After Campaign Poster Generator. Built for Municipal & Public Swachh Campaigns.</p>
+      {/* Creative Footer Branding with Developer Credit */}
+      <footer className="py-8 border-t border-slate-200 text-center bg-white mt-12 space-y-3">
+        <p className="text-xs text-slate-400 font-semibold">
+          © 2026 Before & After Campaign Poster Generator. Built for Municipal & Public Swachh Campaigns.
+        </p>
+        <div className="flex justify-center">
+          <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-50 border border-slate-100 hover:border-emerald-500/20 hover:shadow-sm transition-all duration-300 group">
+            <span className="text-[11px] text-slate-500 font-medium">Developed with</span>
+            <span className="text-emerald-600 animate-pulse text-xs">❤️</span>
+            <span className="text-[11px] text-slate-500 font-medium">by</span>
+            <span className="text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent group-hover:from-emerald-700 group-hover:to-teal-700 transition-all duration-300">
+              Yuvraj Singh Tomar
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );
