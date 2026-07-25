@@ -36,6 +36,13 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleTextChange = (field: 'mainTitle' | 'subtitle' | 'location' | 'footerSlogan', value: string) => {
+    onChange(prev => ({
+      ...prev,
+      [field]: { ...prev[field], text: value }
+    }));
+  };
+
   const handleImageSettingChange = (panel: 'before' | 'after', key: string, value: any) => {
     onChange(prev => {
       const imgKey = panel === 'before' ? 'beforeImage' : 'afterImage';
@@ -178,13 +185,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       { name: 'Roboto', value: 'Roboto' },
       { name: 'Montserrat', value: 'Montserrat' },
     ],
-  };
-
-  const handleTextChange = (field: 'mainTitle' | 'subtitle' | 'location' | 'footerSlogan', value: string) => {
-    onChange(prev => ({
-      ...prev,
-      [field]: { ...prev[field], text: value }
-    }));
   };
 
   const handleStyleChange = (field: 'mainTitle' | 'subtitle' | 'location' | 'footerSlogan', key: string, value: any) => {
