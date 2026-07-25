@@ -96,6 +96,7 @@ const DEFAULT_STATE: PosterState = {
   },
   themeColor: '#1b5e20',
   secondaryColor: '#0d3c12',
+  posterDesign: 'vrindavan',
   qrcode: {
     visible: false,
     data: 'https://swachhbharatmission.gov.in/',
