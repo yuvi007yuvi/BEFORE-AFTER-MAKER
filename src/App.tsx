@@ -32,7 +32,7 @@ const DEFAULT_STATE: PosterState = {
     align: 'center',
   },
   location: {
-    text: 'वार्ड -66, काली मंदिर GVP प्वाइंट की सफाई',
+    text: '',
     fontFamily: '"Noto Sans Devanagari"',
     fontSize: 16,
     color: '#1b5e20',
@@ -277,26 +277,26 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-poppins selection:bg-emerald-100">
       {/* Header Banner */}
-      <header className="sticky top-0 z-50 glass-panel border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-emerald-600 rounded-xl text-white shadow-sm flex items-center justify-center">
-            <Sparkles className="w-5 h-5" />
+      <header className="sticky top-0 z-50 glass-panel border-b border-slate-200 px-4 py-3 sm:px-6 flex flex-row justify-between items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="p-1.5 sm:p-2 bg-emerald-600 rounded-xl text-white shadow-sm flex items-center justify-center">
+            <Sparkles className="w-4 h-4 sm:w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-slate-800 tracking-tight leading-none">Before & After</h1>
-            <p className="text-xs text-slate-500 font-semibold mt-0.5">Campaign Poster Generator</p>
+            <h1 className="text-sm sm:text-lg font-bold text-slate-800 tracking-tight leading-none">Before & After</h1>
+            <p className="text-[10px] sm:text-xs text-slate-500 font-semibold mt-0.5">Campaign Poster Generator</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {autoSaveMsg && (
-            <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium border border-emerald-100 animate-pulse">
+            <span className="hidden md:inline-block text-[10px] text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium border border-emerald-100 animate-pulse">
               {autoSaveMsg}
             </span>
           )}
           <button
             onClick={handleResetProject}
-            className="text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition-all"
+            className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition-all"
           >
             Reset
           </button>

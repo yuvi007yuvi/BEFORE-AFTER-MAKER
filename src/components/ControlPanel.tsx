@@ -127,6 +127,18 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           </div>
         </div>
 
+        {/* Edit Location Address */}
+        <div className="space-y-1">
+          <span className="text-xs font-bold text-slate-500 block">3. LOCATION ADDRESS (लोकेशन पता)</span>
+          <input
+            type="text"
+            placeholder="Enter Location / Address..."
+            value={state.location.text}
+            onChange={(e) => handleTextChange('location', e.target.value)}
+            className="w-full border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-1 focus:ring-emerald-500 outline-none"
+          />
+        </div>
+
         {/* Download Buttons Block */}
         <div className="pt-4 border-t border-slate-100 space-y-2">
           <span className="text-xs font-bold text-slate-500 block text-center uppercase mb-1">Download Campaign Poster</span>
