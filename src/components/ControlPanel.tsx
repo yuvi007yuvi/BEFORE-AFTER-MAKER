@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { PosterState } from './PosterCanvas';
 import { CAMPAIGN_PRESETS, TEMPLATE_LIBRARY } from '../constants/templates';
 import type { CampaignPreset } from '../constants/templates';
@@ -25,6 +25,135 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'templates' | 'text' | 'images' | 'decorations'>('templates');
   const [qrText, setQrText] = useState('https://swachhbharatmission.gov.in/');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const handleImageSettingChange = (panel: 'before' | 'after', key: string, value: any) => {
+    onChange(prev => {
+      const imgKey = panel === 'before' ? 'beforeImage' : 'afterImage';
+      return {
+        ...prev,
+        [imgKey]: { ...prev[imgKey], [key]: value }
+      };
+    });
+  };
+
+  if (isMobile) {
+    return (
+      <div className="w-full flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-4 space-y-4">
+        <h2 className="font-bold text-slate-800 text-sm border-b pb-2 mb-2 uppercase tracking-wide text-center">Mobile Campaign Editor</h2>
+        
+        {/* Upload Before Image */}
+        <div className="space-y-1">
+          <span className="text-xs font-bold text-slate-500 block">1. BEFORE IMAGE (पहले)</span>
+          <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center hover:bg-slate-50 cursor-pointer min-h-[100px]">
+            {state.beforeImage.src && !state.beforeImage.src.startsWith('data:image/svg+xml') ? (
+              <div className="flex items-center gap-3 w-full">
+                <img src={state.beforeImage.src} className="w-16 h-20 object-cover rounded-lg border" alt="Before" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-emerald-600 font-semibold">Image Uploaded</p>
+                  <p className="text-[10px] text-slate-400">Tap to replace image</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-2">
+                <p className="text-xs text-slate-500 font-medium">Select Before Image</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">Camera / Gallery</p>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    if (event.target?.result) {
+                      handleImageSettingChange('before', 'src', event.target.result as string);
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+            />
+          </div>
+        </div>
+
+        {/* Upload After Image */}
+        <div className="space-y-1">
+          <span className="text-xs font-bold text-slate-500 block">2. AFTER IMAGE (बाद में)</span>
+          <div className="relative border-2 border-dashed border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center hover:bg-slate-50 cursor-pointer min-h-[100px]">
+            {state.afterImage.src && !state.afterImage.src.startsWith('data:image/svg+xml') ? (
+              <div className="flex items-center gap-3 w-full">
+                <img src={state.afterImage.src} className="w-16 h-20 object-cover rounded-lg border" alt="After" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-emerald-600 font-semibold">Image Uploaded</p>
+                  <p className="text-[10px] text-slate-400">Tap to replace image</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-2">
+                <p className="text-xs text-slate-500 font-medium">Select After Image</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">Camera / Gallery</p>
+              </div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    if (event.target?.result) {
+                      handleImageSettingChange('after', 'src', event.target.result as string);
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+            />
+          </div>
+        </div>
+
+        {/* Download Buttons Block */}
+        <div className="pt-4 border-t border-slate-100 space-y-2">
+          <span className="text-xs font-bold text-slate-500 block text-center uppercase mb-1">Download Campaign Poster</span>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={() => onExport('png')}
+              className="py-2.5 px-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all text-center"
+            >
+              PNG Image
+            </button>
+            <button
+              onClick={() => onExport('jpg')}
+              className="py-2.5 px-1 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all text-center"
+            >
+              JPG Image
+            </button>
+            <button
+              onClick={() => onExport('pdf')}
+              className="py-2.5 px-1 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold text-xs shadow-sm transition-all text-center"
+            >
+              PDF Print
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const fonts = {
     hi: [
@@ -51,16 +180,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       ...prev,
       [field]: { ...prev[field], [key]: value }
     }));
-  };
-
-  const handleImageSettingChange = (panel: 'before' | 'after', key: string, value: any) => {
-    onChange(prev => {
-      const imgKey = panel === 'before' ? 'beforeImage' : 'afterImage';
-      return {
-        ...prev,
-        [imgKey]: { ...prev[imgKey], [key]: value }
-      };
-    });
   };
 
   const applyPreset = (preset: CampaignPreset) => {
