@@ -304,17 +304,17 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
           {state.decorations.leaves && (
             <>
               {/* Top Left */}
-              <img src="/feather.png" alt="" className="absolute top-6 left-6 w-24 h-24 opacity-35 animate-pulse pointer-events-none rotate-12" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '24px', left: '24px', width: '96px', height: '96px', opacity: 0.35, transform: 'rotate(12deg)' }} />
               {/* Top Right */}
-              <img src="/feather.png" alt="" className="absolute top-28 right-16 w-28 h-28 opacity-30 pointer-events-none -rotate-45" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '112px', right: '64px', width: '112px', height: '112px', opacity: 0.3, transform: 'rotate(-45deg)' }} />
               {/* Mid Left */}
-              <img src="/feather.png" alt="" className="absolute top-80 left-8 w-20 h-20 opacity-20 pointer-events-none rotate-30" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '320px', left: '32px', width: '80px', height: '80px', opacity: 0.2, transform: 'rotate(30deg)' }} />
               {/* Mid Right */}
-              <img src="/feather.png" alt="" className="absolute top-[400px] right-8 w-24 h-24 opacity-15 pointer-events-none rotate-[75deg]" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '400px', right: '32px', width: '96px', height: '96px', opacity: 0.15, transform: 'rotate(75deg)' }} />
               {/* Lower Mid Left */}
-              <img src="/feather.png" alt="" className="absolute bottom-[280px] left-16 w-24 h-24 opacity-20 pointer-events-none -rotate-12" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ bottom: '280px', left: '64px', width: '96px', height: '96px', opacity: 0.2, transform: 'rotate(-12deg)' }} />
               {/* Lower Mid Right */}
-              <img src="/feather.png" alt="" className="absolute bottom-[360px] right-20 w-20 h-20 opacity-15 pointer-events-none rotate-45" />
+              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ bottom: '360px', right: '80px', width: '80px', height: '80px', opacity: 0.15, transform: 'rotate(45deg)' }} />
             </>
           )}
 
