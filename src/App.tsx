@@ -341,19 +341,6 @@ function App() {
               💡 Tip: Click logos/texts/badges directly to select them. Drag inside the before/after panels to reposition the images.
             </p>
           </div>
-
-          {/* Batch Generator Segment */}
-          {!isMobile && (
-            <BatchGenerator
-              currentState={state}
-              onSelectGeneratedPoster={(posterData) => {
-                setState(prev => ({
-                  ...prev,
-                  ...posterData
-                }));
-              }}
-            />
-          )}
         </div>
 
         {/* Right Side (Settings Panel) */}
