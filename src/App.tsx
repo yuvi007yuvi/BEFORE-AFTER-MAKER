@@ -3,7 +3,7 @@ import { PosterCanvas } from './components/PosterCanvas';
 import type { PosterState } from './components/PosterCanvas';
 import { ControlPanel } from './components/ControlPanel';
 import { SVGS } from './constants/templates';
-import html2canvas from 'html2canvas';
+import { toPng, toJpeg } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 import { Sparkles } from 'lucide-react';
 
@@ -167,28 +167,17 @@ function App() {
     const originalTransform = element.style.transform;
     const originalShadow = element.style.boxShadow;
     const originalBorderRadius = element.style.borderRadius;
+    const parent = element.parentElement;
+    const originalParentOverflow = parent ? parent.style.overflow : '';
 
     element.style.transform = 'none';
     element.style.boxShadow = 'none';
     element.style.borderRadius = '0px';
-
-    // Safety Net: Temporarily disable stylesheets containing OKLCH color functions
-    // which crash html2canvas stylesheet parser
-    const disabledSheets: CSSStyleSheet[] = [];
-    for (let i = 0; i < document.styleSheets.length; i++) {
-      const sheet = document.styleSheets[i];
-      try {
-        const rules = sheet.cssRules || [];
-        for (let j = 0; j < rules.length; j++) {
-          if (rules[j].cssText.includes('oklch')) {
-            sheet.disabled = true;
-            disabledSheets.push(sheet);
-            break;
-          }
-        }
-      } catch (e) {
-        // Cross-origin stylesheets might throw security error - ignore
-      }
+    if (parent) {
+      parent.style.overflow = 'visible';
+      // Also temporarily reset width/height to avoid constrained bounds
+      parent.style.width = '800px';
+      parent.style.height = '1000px';
     }
 
     // Wait for styling reset
@@ -197,15 +186,15 @@ function App() {
     try {
       // 300 DPI render requires high scale capture
       const scale = format === 'pdf' ? 3 : 2.5; 
-      const canvas = await html2canvas(element, {
-        useCORS: true,
-        scale: scale,
-        backgroundColor: '#ffffff',
-        logging: false,
-      });
+      
+      let imgData;
+      if (format === 'jpg' || format === 'pdf') {
+        imgData = await toJpeg(element, { quality: 1.0, pixelRatio: scale, backgroundColor: '#ffffff' });
+      } else {
+        imgData = await toPng(element, { pixelRatio: scale, backgroundColor: '#ffffff' });
+      }
 
       if (format === 'pdf') {
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
         // Create custom portrait PDF matching 4:5 aspect ratio (210mm x 262.5mm)
         const pdf = new jsPDF({
           orientation: 'portrait',
@@ -215,8 +204,6 @@ function App() {
         pdf.addImage(imgData, 'JPEG', 0, 0, 210, 262.5);
         pdf.save(`Campaign_Poster_${Date.now()}.pdf`);
       } else {
-        const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
-        const imgData = canvas.toDataURL(mimeType, 1.0);
         const link = document.createElement('a');
         link.href = imgData;
         link.download = `Campaign_Poster_${Date.now()}.${format}`;
@@ -226,15 +213,15 @@ function App() {
       console.error(err);
       alert("Failed to export image. Please try again.");
     } finally {
-      // Restore disabled stylesheets
-      disabledSheets.forEach((sheet) => {
-        sheet.disabled = false;
-      });
-
       // Restore scaling
       element.style.transform = originalTransform;
       element.style.boxShadow = originalShadow;
       element.style.borderRadius = originalBorderRadius;
+      if (parent) {
+        parent.style.overflow = originalParentOverflow;
+        parent.style.width = '';
+        parent.style.height = '';
+      }
     }
   };
 

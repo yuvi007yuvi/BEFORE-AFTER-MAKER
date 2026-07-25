@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
-import html2canvas from 'html2canvas';
+import { toBlob } from 'html-to-image';
 import JSZip from 'jszip';
 import { Upload, FileSpreadsheet, Download, RefreshCw, CheckCircle2 } from 'lucide-react';
 import type { PosterState } from './PosterCanvas';
@@ -56,13 +56,21 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({
     const originalTransform = exportContainer.style.transform;
     exportContainer.style.transform = 'none';
 
+    const parent = exportContainer.parentElement;
+    const originalParentOverflow = parent ? parent.style.overflow : '';
+    if (parent) {
+      parent.style.overflow = 'visible';
+      parent.style.width = '800px';
+      parent.style.height = '1000px';
+    }
+
     setProgress({ current: 0, total: data.length });
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
       
       // Temporarily set canvas inputs matching current row details
-      // Trigger callback to set parent state synchronously for html2canvas to capture
+      // Trigger callback to set parent state synchronously for html-to-image to capture
       onSelectGeneratedPoster({
         mainTitle: row.Title ? { ...currentState.mainTitle, text: row.Title } : currentState.mainTitle,
         subtitle: row.Subtitle ? { ...currentState.subtitle, text: row.Subtitle } : currentState.subtitle,
@@ -76,13 +84,11 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({
       await new Promise(resolve => setTimeout(resolve, 800));
 
       try {
-        const canvas = await html2canvas(exportContainer, {
-          useCORS: true,
-          scale: 2, // Capture at high resolution (approx 2x)
+        const blob = await toBlob(exportContainer, {
+          pixelRatio: 2, // Capture at high resolution (approx 2x)
           backgroundColor: '#ffffff',
         });
         
-        const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/png'));
         if (blob) {
           const fileName = `Poster_${row.Ward || ''}_${row.Location || i + 1}.png`.replace(/[/\\?%*:|"<>\s]/g, '_');
           zip.file(fileName, blob);
@@ -96,6 +102,11 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({
 
     // Restore original transform
     exportContainer.style.transform = originalTransform;
+    if (parent) {
+      parent.style.overflow = originalParentOverflow;
+      parent.style.width = '';
+      parent.style.height = '';
+    }
 
     // Generate ZIP
     const zipBlob = await zip.generateAsync({ type: 'blob' });
