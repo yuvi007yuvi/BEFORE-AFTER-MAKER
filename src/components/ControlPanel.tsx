@@ -146,42 +146,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           />
         </div>
 
-        {/* Poster Background Design (Mobile) */}
-        <div className="space-y-2">
-          <span className="text-xs font-bold text-slate-500 block">4. 🎨 POSTER BACKGROUND</span>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { id: 'classic', label: 'Classic', gradient: '#ffffff', border: '#e2e8f0' },
-              { id: 'vrindavan', label: 'Vrindavan', gradient: 'linear-gradient(175deg, #fef9ef 0%, #fff8e1 30%, #e8f5e9 70%, #c8e6c9 100%)', border: '#a5d6a7' },
-              { id: 'saffron', label: 'Saffron', gradient: 'linear-gradient(180deg, #fff3e0 0%, #ffe0b2 40%, #ffffff 60%, #e8f5e9 100%)', border: '#ffb74d' },
-              { id: 'tricolor', label: '🇮🇳 Tricolor', gradient: 'linear-gradient(180deg, #ff9933 0%, #ff993330 15%, #ffffff 30%, #ffffff 70%, #13883530 85%, #138835 100%)', border: '#ff9933' },
-              { id: 'ocean', label: 'Yamuna', gradient: 'linear-gradient(175deg, #e0f7fa 0%, #b2ebf2 30%, #e0f2f1 60%, #ffffff 100%)', border: '#4dd0e1' },
-              { id: 'royal', label: 'Royal', gradient: 'linear-gradient(175deg, #ede7f6 0%, #d1c4e9 25%, #f3e5f5 50%, #fce4ec 75%, #fff3e0 100%)', border: '#b39ddb' },
-            ].map((design) => (
-              <button
-                key={design.id}
-                onClick={() => onChange(prev => ({ ...prev, posterDesign: design.id as any }))}
-                className={`relative rounded-xl border-2 p-1 transition-all ${
-                  state.posterDesign === design.id
-                    ? 'border-emerald-600 ring-2 ring-emerald-200 shadow-md'
-                    : 'border-slate-200'
-                }`}
-              >
-                <div 
-                  className="w-full h-10 rounded-lg mb-0.5"
-                  style={{ background: design.gradient, border: `1px solid ${design.border}` }}
-                />
-                <span className="text-[9px] font-semibold text-slate-600 block text-center leading-tight">{design.label}</span>
-                {state.posterDesign === design.id && (
-                  <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-[7px]">✓</span>
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Download Buttons Block */}
         <div className="pt-4 border-t border-slate-100 space-y-2">
           <span className="text-xs font-bold text-slate-500 block text-center uppercase mb-1">Download Campaign Poster</span>
@@ -640,42 +604,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         {/* Tab 4: Decorations & Custom Overlays */}
         {activeTab === 'decorations' && (
           <div className="space-y-4">
-            {/* Poster Background Design Themes */}
-            <div className="p-3 border border-slate-200 rounded-xl space-y-3">
-              <span className="font-bold text-xs text-slate-700 block uppercase tracking-wider">🎨 Poster Background Design</span>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { id: 'classic', label: 'Classic White', gradient: '#ffffff', border: '#e2e8f0' },
-                  { id: 'vrindavan', label: 'Vrindavan', gradient: 'linear-gradient(175deg, #fef9ef 0%, #fff8e1 30%, #e8f5e9 70%, #c8e6c9 100%)', border: '#a5d6a7' },
-                  { id: 'saffron', label: 'Saffron Glow', gradient: 'linear-gradient(180deg, #fff3e0 0%, #ffe0b2 40%, #ffffff 60%, #e8f5e9 100%)', border: '#ffb74d' },
-                  { id: 'tricolor', label: 'Tricolor 🇮🇳', gradient: 'linear-gradient(180deg, #ff9933 0%, #ff993330 15%, #ffffff 30%, #ffffff 70%, #13883530 85%, #138835 100%)', border: '#ff9933' },
-                  { id: 'ocean', label: 'Yamuna Blue', gradient: 'linear-gradient(175deg, #e0f7fa 0%, #b2ebf2 30%, #e0f2f1 60%, #ffffff 100%)', border: '#4dd0e1' },
-                  { id: 'royal', label: 'Royal Purple', gradient: 'linear-gradient(175deg, #ede7f6 0%, #d1c4e9 25%, #f3e5f5 50%, #fce4ec 75%, #fff3e0 100%)', border: '#b39ddb' },
-                ].map((design) => (
-                  <button
-                    key={design.id}
-                    onClick={() => onChange(prev => ({ ...prev, posterDesign: design.id as any }))}
-                    className={`relative rounded-xl border-2 p-1 transition-all hover:scale-105 ${
-                      state.posterDesign === design.id
-                        ? 'border-emerald-600 ring-2 ring-emerald-200 shadow-md'
-                        : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <div 
-                      className="w-full h-14 rounded-lg mb-1"
-                      style={{ background: design.gradient, border: `1px solid ${design.border}` }}
-                    />
-                    <span className="text-[10px] font-semibold text-slate-600 block text-center leading-tight">{design.label}</span>
-                    {state.posterDesign === design.id && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-600 rounded-full flex items-center justify-center">
-                        <span className="text-white text-[8px]">✓</span>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Custom Theme Colors */}
             <div className="p-3 border border-slate-200 rounded-xl space-y-3">
               <span className="font-bold text-xs text-slate-700 block uppercase tracking-wider">Theme Accent Colors</span>

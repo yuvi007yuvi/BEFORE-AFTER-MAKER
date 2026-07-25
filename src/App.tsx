@@ -96,7 +96,6 @@ const DEFAULT_STATE: PosterState = {
   },
   themeColor: '#1b5e20',
   secondaryColor: '#0d3c12',
-  posterDesign: 'vrindavan',
   qrcode: {
     visible: false,
     data: 'https://swachhbharatmission.gov.in/',
@@ -120,7 +119,7 @@ function App() {
   const [state, setState] = useState<PosterState>(DEFAULT_STATE);
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
   const [canvasScale, setCanvasScale] = useState<number>(0.75);
-
+  const [autoSaveMsg, setAutoSaveMsg] = useState('');
   // Auto-fit canvas scale depending on screen width
   useEffect(() => {
     const handleResize = () => {
@@ -136,7 +135,28 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Autosave Project to localStorage every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      localStorage.setItem('ba_campaign_poster_project', JSON.stringify(state));
+      setAutoSaveMsg('Autosaved at ' + new Date().toLocaleTimeString());
+      setTimeout(() => setAutoSaveMsg(''), 3000);
+    }, 30000);
 
+    return () => clearInterval(interval);
+  }, [state]);
+
+  // Load from localstorage on start if exists
+  useEffect(() => {
+    const saved = localStorage.getItem('ba_campaign_poster_project');
+    if (saved) {
+      try {
+        setState(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
 
   // Export to Image (PNG / JPG) or PDF (Print ready, 300 DPI approx)
   const handleExport = async (format: 'png' | 'jpg' | 'pdf') => {
@@ -152,6 +172,25 @@ function App() {
     element.style.boxShadow = 'none';
     element.style.borderRadius = '0px';
 
+    // Safety Net: Temporarily disable stylesheets containing OKLCH color functions
+    // which crash html2canvas stylesheet parser
+    const disabledSheets: CSSStyleSheet[] = [];
+    for (let i = 0; i < document.styleSheets.length; i++) {
+      const sheet = document.styleSheets[i];
+      try {
+        const rules = sheet.cssRules || [];
+        for (let j = 0; j < rules.length; j++) {
+          if (rules[j].cssText.includes('oklch')) {
+            sheet.disabled = true;
+            disabledSheets.push(sheet);
+            break;
+          }
+        }
+      } catch (e) {
+        // Cross-origin stylesheets might throw security error - ignore
+      }
+    }
+
     // Wait for styling reset
     await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -161,26 +200,8 @@ function App() {
       const canvas = await html2canvas(element, {
         useCORS: true,
         scale: scale,
-        backgroundColor: null,
+        backgroundColor: '#ffffff',
         logging: false,
-        onclone: (clonedDoc: Document) => {
-          // Surgically remove ONLY css rules containing oklab/oklch 
-          // DO NOT disable entire stylesheets — that kills all Tailwind layout
-          for (let i = 0; i < clonedDoc.styleSheets.length; i++) {
-            const sheet = clonedDoc.styleSheets[i];
-            try {
-              const rules = sheet.cssRules;
-              if (!rules) continue;
-              // Walk backwards so index stays valid after deletion
-              for (let j = rules.length - 1; j >= 0; j--) {
-                const text = rules[j].cssText;
-                if (text.includes('oklab') || text.includes('oklch')) {
-                  sheet.deleteRule(j);
-                }
-              }
-            } catch (_e) { /* cross-origin stylesheet — skip */ }
-          }
-        },
       });
 
       if (format === 'pdf') {
@@ -205,6 +226,11 @@ function App() {
       console.error(err);
       alert("Failed to export image. Please try again.");
     } finally {
+      // Restore disabled stylesheets
+      disabledSheets.forEach((sheet) => {
+        sheet.disabled = false;
+      });
+
       // Restore scaling
       element.style.transform = originalTransform;
       element.style.boxShadow = originalShadow;
@@ -259,7 +285,11 @@ function App() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-
+          {autoSaveMsg && (
+            <span className="hidden md:inline-block text-[10px] text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full font-medium border border-emerald-100 animate-pulse">
+              {autoSaveMsg}
+            </span>
+          )}
           <button
             onClick={handleResetProject}
             className="text-[10px] sm:text-xs font-bold text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl transition-all"

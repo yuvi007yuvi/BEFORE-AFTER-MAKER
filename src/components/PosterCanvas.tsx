@@ -57,7 +57,6 @@ export interface PosterState {
   };
   themeColor: string;
   secondaryColor: string;
-  posterDesign: 'classic' | 'vrindavan' | 'saffron' | 'tricolor' | 'ocean' | 'royal';
   qrcode: {
     visible: boolean;
     data: string;
@@ -232,38 +231,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         return 'transparent';
       case 'light':
       default:
-         return `linear-gradient(0deg, ${state.themeColor}1a 0%, rgba(255,255,255,0) 100%)`;
-    }
-  };
-
-  const getPosterBackground = (): React.CSSProperties => {
-    const design = state.posterDesign || 'classic';
-    switch (design) {
-      case 'vrindavan':
-        return {
-          background: 'linear-gradient(175deg, #fef9ef 0%, #fff8e1 30%, #e8f5e9 70%, #c8e6c9 100%)',
-        };
-      case 'saffron':
-        return {
-          background: 'linear-gradient(180deg, #fff3e0 0%, #ffe0b2 40%, #ffffff 60%, #e8f5e9 100%)',
-        };
-      case 'tricolor':
-        return {
-          background: 'linear-gradient(180deg, #ff9933 0%, #ff993310 8%, #ffffff 15%, #ffffff 85%, #13883510 92%, #138835 100%)',
-        };
-      case 'ocean':
-        return {
-          background: 'linear-gradient(175deg, #e0f7fa 0%, #b2ebf2 30%, #e0f2f1 60%, #ffffff 100%)',
-        };
-      case 'royal':
-        return {
-          background: 'linear-gradient(175deg, #ede7f6 0%, #d1c4e9 25%, #f3e5f5 50%, #fce4ec 75%, #fff3e0 100%)',
-        };
-      case 'classic':
-      default:
-        return {
-          background: '#ffffff',
-        };
+        return `linear-gradient(0deg, ${state.themeColor}1a 0%, rgba(255,255,255,0) 100%)`;
     }
   };
 
@@ -286,7 +254,7 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
         <div
           id="poster-canvas-export-target"
           ref={containerRef}
-          className={`relative select-none shadow-2xl overflow-hidden flex flex-col justify-between`}
+          className={`relative bg-white select-none shadow-2xl overflow-hidden flex flex-col justify-between`}
           style={{
             width: '800px',
             height: '1000px',
@@ -297,24 +265,23 @@ export const PosterCanvas: React.FC<PosterCanvasProps> = ({
             left: 0,
             boxShadow: state.decorations.shadows ? '0 25px 50px -12px rgba(0, 0, 0, 0.25)' : 'none',
             borderRadius: state.decorations.roundedCorners ? '24px' : '0px',
-            ...getPosterBackground(),
           }}
         >
           {/* Leaves/Feathers Background Decoration */}
           {state.decorations.leaves && (
             <>
               {/* Top Left */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '24px', left: '24px', width: '96px', height: '96px', opacity: 0.35, transform: 'rotate(12deg)' }} />
+              <img src="/feather.png" alt="" className="absolute top-6 left-6 w-24 h-24 opacity-35 animate-pulse pointer-events-none rotate-12" />
               {/* Top Right */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '112px', right: '64px', width: '112px', height: '112px', opacity: 0.3, transform: 'rotate(-45deg)' }} />
+              <img src="/feather.png" alt="" className="absolute top-28 right-16 w-28 h-28 opacity-30 pointer-events-none -rotate-45" />
               {/* Mid Left */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '320px', left: '32px', width: '80px', height: '80px', opacity: 0.2, transform: 'rotate(30deg)' }} />
+              <img src="/feather.png" alt="" className="absolute top-80 left-8 w-20 h-20 opacity-20 pointer-events-none rotate-30" />
               {/* Mid Right */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ top: '400px', right: '32px', width: '96px', height: '96px', opacity: 0.15, transform: 'rotate(75deg)' }} />
+              <img src="/feather.png" alt="" className="absolute top-[400px] right-8 w-24 h-24 opacity-15 pointer-events-none rotate-[75deg]" />
               {/* Lower Mid Left */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ bottom: '280px', left: '64px', width: '96px', height: '96px', opacity: 0.2, transform: 'rotate(-12deg)' }} />
+              <img src="/feather.png" alt="" className="absolute bottom-[280px] left-16 w-24 h-24 opacity-20 pointer-events-none -rotate-12" />
               {/* Lower Mid Right */}
-              <img src="/feather.png" alt="" className="absolute pointer-events-none" style={{ bottom: '360px', right: '80px', width: '80px', height: '80px', opacity: 0.15, transform: 'rotate(45deg)' }} />
+              <img src="/feather.png" alt="" className="absolute bottom-[360px] right-20 w-20 h-20 opacity-15 pointer-events-none rotate-45" />
             </>
           )}
 
